@@ -14,6 +14,7 @@ class MapMatrix:
         for i in range(self.size):
             for j in range(self.size):
                 self.matrix[i][j] = self.generate_random_event()
+        self.matrix[0][0] = None  # Assurer que la position de départ est vide
 
     def generate_random_event(self):
         """Génère un événement aléatoire"""
