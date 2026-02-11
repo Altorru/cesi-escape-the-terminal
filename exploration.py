@@ -15,9 +15,7 @@ class MapMatrix:
         # Parcourir en démarrant de 0 0 aléatoirement vers le bas ou la droite, et ajouter des murs aléatoires sur les cases non visitées
         x, y = 0, 0
         safe_zones = [(0, 0), (self.size - 1, self.size - 1)]
-        print("\nGenerating map...")
         while (x, y) != (self.size - 1, self.size - 1):
-            print(f"Creating path... Current position: ({x}, {y})")
             self.matrix[x][y] = None  # Assurer que le chemin est libre
             if x < self.size - 1 and y < self.size - 1:
                 if random.choice([True, False]):
@@ -31,15 +29,12 @@ class MapMatrix:
             elif y < self.size - 1:
                 y += 1  # Aller à droite
                 safe_zones.append((x, y))
-        print("Path generated successfully!")
         
         # Ajouter des murs aléatoires dans les cases non visitées
         for i in range(self.size):
             for j in range(self.size):
                 if (i, j) not in safe_zones and random.random() < 0.5:  # 50% de chance d'ajouter un mur
-                    self.matrix[i][j] = Wall()
-        print("Walls added to the map!")
-                
+                    self.matrix[i][j] = Wall()                
         
         # Étape 2 : Ajouter des événements aléatoires dans les cases restantes (celles qui ne sont pas des murs)
         for i in range(self.size):
