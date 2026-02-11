@@ -23,7 +23,7 @@ class Wall(Location):
     
     def trigger_event(self, hero):
         """Le mur ne déclenche aucun événement, il bloque simplement le passage"""
-        print("\n🚧 You hit a wall! You can't go that way.")
+        ui.notify("blocked_move", "")
 
 class Door(Location):
     """Représente une porte dans une zone d'exploration"""
