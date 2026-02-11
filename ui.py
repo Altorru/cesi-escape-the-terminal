@@ -44,7 +44,7 @@ class PassiveUI(Observer):
       console.print("\n🧰 Tu as trouvé un coffre!")
 
     if event_type == "found_item":
-      console.print(f"\n🔑 You found a {data.name}!")
+      console.print(f"\n🔑 Tu as trouvé {data.name}!")
 
   """============================== BUILDERS =============================="""
 
