@@ -7,7 +7,6 @@ print("C'est parti pour l'aventure! 🚀\n")
 
 from base import Door, Chest
 from characters import Enemy, Hero
-from events import PathEvent
 from objects import Key
 
 # Création du héros
@@ -25,8 +24,7 @@ for i in range(len(exploration_matrix)):
     for j in range(len(exploration_matrix[i])):
         location = exploration_matrix[i][j]
         if location is not None:
-            event = PathEvent(location)
-            result = event.trigger_event(hero)
+            result = location.trigger_event(hero)
             if result is not None:
                 print(f"\n➡️ Moving to {result}...\n")
                 # Ici, vous pourriez implémenter la logique pour changer de zone d'exploration
