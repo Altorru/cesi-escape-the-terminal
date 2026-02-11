@@ -38,17 +38,27 @@ class PassiveUI(Observer):
     """----------------- ENVIRONMENT EVENTS --------------------"""
 
     if event_type == "found_door":
-      console.print(f"\n🚪 Tu as trouvé une porte menant vers {data.leads_to}!")
+      console.print(f"\nTu as trouvé une porte menant vers [purple]{data}[purple]!")
 
     if event_type == "found_chest":
-      console.print("\n🧰 Tu as trouvé un coffre!")
+      console.print("\nTu as trouvé un [green]coffre[green]!")
 
     if event_type == "found_item":
-      console.print(f"\n🔑 Tu as trouvé {data.name}!")
+      console.print(f"\nTu as trouvé [bold yellow]{data}![bold yellow]")
 
-  """============================== BUILDERS =============================="""
+    if event_type == "blocked_move":
+      console.print("\n[bold red]Tu as pris un mur ![bold red]"
+                    " Tu ne peux pas aller dans cette direction.")
 
-  """============================== Colorizer =============================="""
+    if event_type == "enemy_encounter":
+      console.print("\nTu est tombé sur [red]{data}[red]!")
+
+    if event_type == "enemy_defeated":
+      console.print(f"\n Tu as battu [red]{data.name}[red] "
+                    f"et gagné [blue]{data.dropped_exp} EXP![blue]")
+    """============================== BUILDERS =============================="""
+
+    """============================== Colorizer =============================="""
 
 
 class ActiveUI(Observer):

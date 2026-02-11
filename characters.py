@@ -1,4 +1,8 @@
 from base import Location
+from ui import PassiveUI
+
+ui = PassiveUI()
+
 class Character:
     def __init__(self, name, health, attack):
         self.name = name
@@ -24,8 +28,9 @@ class Enemy(Character, Location):
     
     def trigger_event(self, hero):
         """Déclenche l'événement de combat avec l'ennemi, juste mettre des dégats et récuperer de l'xp à la fin du combat"""
-        print(f"\n👹 You encountered a {self.name}!")
-        print(f"\n🎉 You defeated the {self.name} and gained {self.dropped_exp} EXP!")
+        ui.notify("enemy_encounter","self.name")
+
+        ui.notify("enemy_defeated", self)
         hero.exp += self.dropped_exp
         self.is_explored = True
 
