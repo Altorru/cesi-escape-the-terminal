@@ -1,6 +1,6 @@
 import questionary
 import random
-from base import Location, Door, Chest
+from base import Door, Chest
 from characters import Enemy
 from factories import LocationFactory
 
