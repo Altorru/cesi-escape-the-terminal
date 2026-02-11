@@ -1,8 +1,6 @@
-import random
-
 import questionary
-
-from base import Door, Chest, Wall
+import random
+from base import Door, Chest, Wall, Exit
 from characters import Enemy
 from factories import LocationFactory
 from ui import PassiveUI
@@ -34,8 +32,6 @@ class MapMatrix:
             return LocationFactory.create_chest()
         elif chosen_event_type is Enemy:
             return LocationFactory.create_enemy()
-        elif chosen_event_type is Wall:
-            return Wall()
         else:
             return None
     
@@ -76,6 +72,8 @@ class Exploration:
         current_event = self.map.matrix[self.current_position[0]][self.current_position[1]]
         if current_event and not current_event.is_explored:
             current_event.trigger_event(self.player)
+            if isinstance(current_event, Exit):
+                exit(0)
         elif current_event and current_event.is_explored:
             print("\n🔁 You've already explored this area. Nothing happens.")
         else:

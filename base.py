@@ -25,6 +25,16 @@ class Wall(Location):
         """Le mur ne déclenche aucun événement, il bloque simplement le passage"""
         pui.notify("blocked_move", "")
 
+class Exit(Location):
+    """Représente la sortie de la zone d'exploration"""
+    def __init__(self):
+        super().__init__(can_be_explored=True)
+    
+    def trigger_event(self, hero):
+        """Déclenche l'événement de la sortie"""
+        ui.notify("found_exit", "")
+        self.is_explored = True
+
 class Door(Location):
     """Représente une porte dans une zone d'exploration"""
     def __init__(self, name, leads_to=None):
