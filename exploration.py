@@ -54,19 +54,26 @@ class Exploration:
             self.current_position = (x, y + 1)
         else:
             print("\n🚫 You can't move in that direction!")
+            return False
+        return True
+    
+    def trigger_current_event(self):
+        """Déclenche l'événement de la case actuelle"""
+        current_event = self.map.matrix[self.current_position[0]][self.current_position[1]]
+        if current_event and not current_event.is_explored:
+            current_event.trigger_event(self.player)
+        elif current_event and current_event.is_explored:
+            print("\n🔁 You've already explored this area. Nothing happens.")
+        else:
+            print("\n🌳 This area is empty. Nothing happens.")
     
     def start(self): # Move with questionary
         """Démarre l'exploration de la matrice"""
+        previous_position_valid = True
         while True:
-            current_event = self.map.matrix[self.current_position[0]][self.current_position[1]]
-            if current_event:
-                result = current_event.trigger_event(self.player)
-                if result is not None:
-                    print(f"\n➡️ Moving to {result}...\n")
-                    # Ici, vous pourriez implémenter la logique pour changer de zone d'exploration
-            else:
-                print("\n🌳 You are in an empty area. Nothing happens.")
-            
+            if previous_position_valid:
+                self.trigger_current_event()
+
             # Demander au joueur où il veut aller ensuite
             next_move = questionary.select(
                 "Where do you want to go next?",
@@ -77,6 +84,6 @@ class Exploration:
                 print("\nExiting exploration. Goodbye! 👋")
                 break
             
-            self.move_player(next_move)
-        
+            previous_position_valid = self.move_player(next_move)
+    
     

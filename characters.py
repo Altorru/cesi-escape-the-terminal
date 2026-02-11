@@ -19,12 +19,14 @@ class Enemy(Character, Location):
     def __init__(self, name, health, attack, dropped_exp):
         super().__init__(name, health, attack)
         self.dropped_exp = dropped_exp
+        self.is_explored = False
     
     def trigger_event(self, hero):
         """Déclenche l'événement de combat avec l'ennemi, juste mettre des dégats et récuperer de l'xp à la fin du combat"""
         print(f"\n👹 You encountered a {self.name}!")
         print(f"\n🎉 You defeated the {self.name} and gained {self.dropped_exp} EXP!")
         hero.exp += self.dropped_exp
+        self.is_explored = True
 
 class Hero(Character):
     """Représente le héros du jeu"""

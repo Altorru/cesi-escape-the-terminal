@@ -3,6 +3,7 @@ class Location(ABC):
     """Classe de base pour les différentes locations (Door, Chest, etc...)"""
     def __init__(self, can_be_explored=True):
         self.can_be_explored = can_be_explored
+        self.is_explored = False
     
     @abstractmethod
     def trigger_event(self, hero):
@@ -19,6 +20,7 @@ class Door(Location):
     def trigger_event(self, hero):
         """Déclenche l'événement de la porte"""
         print(f"\n🚪 You found a door leading to {self.leads_to}!")
+        self.is_explored = True
         return self.leads_to
 
 class Chest(Location):
@@ -34,3 +36,4 @@ class Chest(Location):
             hero.inventory.append(item)
             if hasattr(item, "name"):
                 print(f"\n🔑 You found a {item.name}!")
+        self.is_explored = True
