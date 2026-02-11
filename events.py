@@ -1,4 +1,4 @@
-from base import Door, Chest, Location
+from base import Door, Chest, Wall, Location
 from characters import Enemy, Hero
 from objects import Key
 
@@ -25,5 +25,8 @@ class PathEvent:
             print(f"\n👹 You encountered an enemy: {enemy.name} (HP: {enemy.health}, DMG: {enemy.attack})!")
             print(f"\n🎉 You defeated the {enemy.name} and gained {enemy.dropped_exp} EXP!")
             hero.exp += enemy.dropped_exp
+        
+        elif isinstance(self.location, Wall):
+            self.location.trigger_event(hero)
         
         return None

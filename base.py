@@ -16,6 +16,15 @@ class Location(ABC):
         """Méthode à implémenter pour déclencher l'événement associé à la location"""
         pass
 
+class Wall(Location):
+    """Représente un mur infranchissable dans une zone d'exploration"""
+    def __init__(self):
+        super().__init__(can_be_explored=False)
+    
+    def trigger_event(self, hero):
+        """Le mur ne déclenche aucun événement, il bloque simplement le passage"""
+        print("\n🚧 You hit a wall! You can't go that way.")
+
 class Door(Location):
     """Représente une porte dans une zone d'exploration"""
     def __init__(self, name, leads_to=None):

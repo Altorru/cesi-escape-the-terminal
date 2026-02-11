@@ -1,6 +1,6 @@
 import questionary
 import random
-from base import Door, Chest
+from base import Door, Chest, Wall
 from characters import Enemy
 from factories import LocationFactory
 
@@ -17,7 +17,7 @@ class MapMatrix:
 
     def generate_random_event(self):
         """Génère un événement aléatoire"""
-        event_types = [None, Door, Chest, Enemy]  # Ajouter None pour les cases vides
+        event_types = [None, Door, Chest, Enemy, Wall]  # Ajouter None pour les cases vides
 
         chosen_event_type = random.choice(event_types)
 
@@ -27,6 +27,8 @@ class MapMatrix:
             return LocationFactory.create_chest()
         elif chosen_event_type is Enemy:
             return LocationFactory.create_enemy()
+        elif chosen_event_type is Wall:
+            return Wall()
         else:
             return None
     
@@ -55,6 +57,11 @@ class Exploration:
         else:
             print("\n🚫 You can't move in that direction!")
             return False
+        if self.map.matrix[self.current_position[0]][self.current_position[1]] and not self.map.matrix[self.current_position[0]][self.current_position[1]].can_be_explored:
+            print("\n🚧 You hit a wall! You can't go that way.")
+            self.current_position = (x, y)  # Revert to previous position
+            return False
+        print (f"\n➡️ Moved to position {self.current_position}...")
         return True
     
     def trigger_current_event(self):
