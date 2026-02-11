@@ -28,7 +28,7 @@ class Enemy(Character, Location):
     
     def trigger_event(self, hero):
         """Déclenche l'événement de combat avec l'ennemi, juste mettre des dégats et récuperer de l'xp à la fin du combat"""
-        pui.notify("enemy_encounter", self.name)
+        pui.notify("enemy_encounter", self)
 
         pui.notify("enemy_defeated", self)
         hero.exp += self.dropped_exp

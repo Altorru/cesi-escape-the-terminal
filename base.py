@@ -32,7 +32,7 @@ class Exit(Location):
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la sortie"""
-        ui.notify("found_exit", "")
+        pui.notify("found_exit", "")
         self.is_explored = True
 
 class Door(Location):

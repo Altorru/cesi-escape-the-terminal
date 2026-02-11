@@ -44,14 +44,16 @@ class PassiveUI(Observer):
       console.print("\nTu as trouvé un [green]coffre[green]!")
 
     if event_type == "found_item":
-      console.print(f"\nTu as trouvé [bold yellow]{data}![bold yellow]")
+      console.print(f"\nTu as trouvé [bold yellow]{data.name}![bold yellow]"
+                    f"(Ouvre: {data.opens}")
 
     if event_type == "blocked_move":
       console.print("\n[bold red]Tu as pris un mur ![bold red]"
                     " Tu ne peux pas aller dans cette direction.")
 
     if event_type == "enemy_encounter":
-      console.print(f"\nTu est tombé sur [red]{data}[red]!")
+      console.print(f"\nTu est tombé sur [red]{data.name}[red]!"
+                    f"(HP: {data.health}, DMG: {data.attack})")
 
     if event_type == "enemy_defeated":
       console.print(f"\n Tu as battu [red]{data.name}[red] "
