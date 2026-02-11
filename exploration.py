@@ -1,5 +1,4 @@
-import inspect
-import sys
+import questionary
 import random
 from base import Location, Door, Chest
 from characters import Enemy
@@ -37,8 +36,47 @@ class MapMatrix:
             print(" | ".join([str(type(event).__name__) if event else "Empty" for event in row]))
 
 class Exploration:
-    def __init__(self, player, matrix):
+    def __init__(self, player, map):
         self.player = player
-        self.matrix = matrix
+        self.map = map
+        self.current_position = (0, 0)  # Position de départ
+
+    def move_player(self, direction):
+        """Déplace le joueur dans la matrice en fonction de la direction choisie"""
+        x, y = self.current_position
+        if direction == "Up" and x > 0:
+            self.current_position = (x - 1, y)
+        elif direction == "Down" and x < self.map.size - 1:
+            self.current_position = (x + 1, y)
+        elif direction == "Left" and y > 0:
+            self.current_position = (x, y - 1)
+        elif direction == "Right" and y < self.map.size - 1:
+            self.current_position = (x, y + 1)
+        else:
+            print("\n🚫 You can't move in that direction!")
     
+    def start(self): # Move with questionary
+        """Démarre l'exploration de la matrice"""
+        while True:
+            current_event = self.map.matrix[self.current_position[0]][self.current_position[1]]
+            if current_event:
+                result = current_event.trigger_event(self.player)
+                if result is not None:
+                    print(f"\n➡️ Moving to {result}...\n")
+                    # Ici, vous pourriez implémenter la logique pour changer de zone d'exploration
+            else:
+                print("\n🌳 You are in an empty area. Nothing happens.")
+            
+            # Demander au joueur où il veut aller ensuite
+            next_move = questionary.select(
+                "Where do you want to go next?",
+                choices=["Up", "Down", "Left", "Right", "Exit Exploration"]
+            ).ask()
+
+            if next_move == "Exit Exploration":
+                print("\nExiting exploration. Goodbye! 👋")
+                break
+            
+            self.move_player(next_move)
+        
     

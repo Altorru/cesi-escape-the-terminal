@@ -23,18 +23,11 @@ exploration_matrix = [
     [Chest([Key("Gold Key", "Zone 4")]), Door("Door to Zone 3", "Zone 3"), None]
 ]
 
-# Simulation d'une exploration
-# for i in range(len(exploration_matrix)):
-#     for j in range(len(exploration_matrix[i])):
-#         location = exploration_matrix[i][j]
-#         if location is not None:
-#             result = location.trigger_event(hero)
-#             if result is not None:
-#                 print(f"\n➡️ Moving to {result}...\n")
-                # Ici, vous pourriez implémenter la logique pour changer de zone d'exploration
-
 map_matrix = MapMatrix(3)
 map_matrix.generate_events()
 map_matrix.show_matrix()
+
+exploration = Exploration(hero, map_matrix)
+exploration.start()
 
 print("\nExploration complete! 🎉")
