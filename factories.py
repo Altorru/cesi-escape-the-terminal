@@ -5,9 +5,9 @@ import random
 class LocationFactory:
     """Factory pour créer des instances de Door, Chest, Enemy, etc..."""
     @staticmethod
-    def create_door(name, leads_to=None):
+    def create_door(leads_to=None):
         names = ["Ancient Door", "Mysterious Door", "Hidden Door", "Secret Door"]
-        name = name if name else random.choice(names)
+        name = random.choice(names)
         return Door(name, leads_to)
     
     @staticmethod

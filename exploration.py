@@ -18,17 +18,12 @@ class MapMatrix:
 
     def generate_random_event(self):
         """Génère un événement aléatoire"""
-        # Get all classes that are subclasses of Location in base and characters modules
-        # Create from factory if not None
-        event_types = [None]  # Ajouter None pour les cases vides
-        for module in [sys.modules['base'], sys.modules['characters']]:
-            for name, obj in inspect.getmembers(module):
-                if inspect.isclass(obj) and issubclass(obj, Location) and obj is not Location:
-                    event_types.append(obj)
+        event_types = [None, Door, Chest, Enemy]  # Ajouter None pour les cases vides
+
         chosen_event_type = random.choice(event_types)
 
         if chosen_event_type is Door:
-            return LocationFactory.create_door(None)
+            return LocationFactory.create_door()
         elif chosen_event_type is Chest:
             return LocationFactory.create_chest()
         elif chosen_event_type is Enemy:
