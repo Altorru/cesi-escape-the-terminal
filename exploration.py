@@ -13,16 +13,45 @@ class MapMatrix:
         self.size = size
         self.matrix = [[None for _ in range(size)] for _ in range(size)]
     
-    def generate_events(self):
-        """Génère des événements aléatoires pour chaque case de la matrice"""
+    def generate_procedural_map(self):
+        """Génère une matrice de la carte avec premierement des murs pour créer des chemins, puis ajoute des événements aléatoires dans les cases restantes"""
+        # Étape 1 : Générer des murs pour créer au moins un chemin de la position de départ (0, 0) à la position d'arrivée (size-1, size-1)
+        # Parcourir en démarrant de 0 0 aléatoirement vers le bas ou la droite, et ajouter des murs aléatoires sur les cases non visitées
+        x, y = 0, 0
+        safe_zones = [(0, 0), (self.size - 1, self.size - 1)]
+        while (x, y) != (self.size - 1, self.size - 1):
+            self.matrix[x][y] = None  # Assurer que le chemin est libre
+            if x < self.size - 1 and y < self.size - 1:
+                if random.choice([True, False]):
+                    y += 1  # Aller à droite
+                else:
+                    x += 1  # Aller en bas
+                safe_zones.append((x, y))
+            elif x < self.size - 1:
+                x += 1  # Aller en bas
+                safe_zones.append((x, y))
+            elif y < self.size - 1:
+                y += 1  # Aller à droite
+                safe_zones.append((x, y))
+
+        # Ajouter des murs aléatoires dans les cases non visitées
         for i in range(self.size):
             for j in range(self.size):
-                self.matrix[i][j] = self.generate_random_event()
+                if (i, j) not in safe_zones and random.random() < 0.5:  # 50% de chance d'ajouter un mur
+                    self.matrix[i][j] = Wall()
+        
+        # Étape 2 : Ajouter des événements aléatoires dans les cases restantes (celles qui ne sont pas des murs)
+        for i in range(self.size):
+            for j in range(self.size):
+                if self.matrix[i][j] is None:  # Si la case n'est pas un mur
+                    self.matrix[i][j] = self.generate_random_event()
+
         self.matrix[0][0] = None  # Assurer que la position de départ est vide
+        self.matrix[self.size - 1][self.size - 1] = Exit()  # Assurer que la position d'arrivée est une sortie
 
     def generate_random_event(self):
         """Génère un événement aléatoire"""
-        event_types = [None, Door, Chest, Enemy, Wall]  # Ajouter None pour les cases vides
+        event_types = [None, Door, Chest, Enemy]  # Ajouter None pour les cases vides
 
         chosen_event_type = random.choice(event_types)
 
