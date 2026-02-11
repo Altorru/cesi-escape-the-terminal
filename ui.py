@@ -51,7 +51,7 @@ class PassiveUI(Observer):
                     " Tu ne peux pas aller dans cette direction.")
 
     if event_type == "enemy_encounter":
-      console.print("\nTu est tombé sur [red]{data}[red]!")
+      console.print(f"\nTu est tombé sur [red]{data}[red]!")
 
     if event_type == "enemy_defeated":
       console.print(f"\n Tu as battu [red]{data.name}[red] "
