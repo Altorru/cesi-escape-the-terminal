@@ -1,4 +1,10 @@
 from abc import ABC, abstractmethod
+
+from ui import PassiveUI
+
+ui = PassiveUI()
+
+
 class Location(ABC):
     """Classe de base pour les différentes locations (Door, Chest, etc...)"""
     def __init__(self, can_be_explored=True):
@@ -19,7 +25,7 @@ class Door(Location):
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la porte"""
-        print(f"\n🚪 You found a door leading to {self.leads_to}!")
+        ui.notify("found_door", self.leads_to)
         self.is_explored = True
         return self.leads_to
 
