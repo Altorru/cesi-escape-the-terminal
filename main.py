@@ -1,5 +1,3 @@
-print("C'est parti pour l'aventure! 🚀\n")
-
 # Matrice représentant les différentes zones et leurs stages
 # Chaque None correspond à une zone explorable ouverte
 # Il y a aussi 3 Classes Door, Chest, Enemy pour les événements d'exploration
@@ -8,6 +6,11 @@ print("C'est parti pour l'aventure! 🚀\n")
 from base import Door, Chest
 from characters import Enemy, Hero
 from objects import Key
+from ui import PassiveUI
+
+ui = PassiveUI()
+
+ui.notify("title", "")
 
 # Création du héros
 hero = Hero("Alex", 100, 15)
@@ -26,7 +29,7 @@ for i in range(len(exploration_matrix)):
         if location is not None:
             result = location.trigger_event(hero)
             if result is not None:
-                print(f"\n➡️ Moving to {result}...\n")
+                ui.notify("character_move", result)
                 # Ici, vous pourriez implémenter la logique pour changer de zone d'exploration
 
-print("\nExploration complete! 🎉")
+ui.notify("victory_screen", "")

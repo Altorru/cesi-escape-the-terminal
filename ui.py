@@ -1,6 +1,8 @@
+from abc import ABC, abstractmethod
+
+from pygments.lexers import data
 from rich.console import Console
 from rich.panel import Panel
-from abc import ABC, abstractmethod
 
 console = Console()
 
@@ -13,7 +15,7 @@ class Observer(ABC):
 class PassiveUI(Observer):
 
   """============================== PRINTERS =============================="""
-
+  """---------------- SCREENS -------------"""
   def notify(self, event_type, data):
     if event_type == "title":
       console.clear()
@@ -21,6 +23,17 @@ class PassiveUI(Observer):
         "[bold red]Escape from the Terminal[/bold red]\n",
         border_style="red"
       ))
+
+    if event_type == "victory_screen":
+      console.clear()
+      console.print(Panel.fit(
+        "[bold red]Bravo, vous êtes sortis du terminal[/bold red]\n",
+        border_style="red"
+      ))
+
+    """----------------- CHARACTER EVENTS --------------"""
+    if event_type == "character_move":
+      console.print(f"\n➡️ Moving to {data}...\n")
 
   """============================== BUILDERS =============================="""
 
