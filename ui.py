@@ -33,13 +33,18 @@ class PassiveUI(Observer):
 
     """----------------- CHARACTER EVENTS --------------"""
     if event_type == "character_move":
-      console.print(f"\n➡️ Moving to {data}...\n")
+      console.print(f"\n➡️ On se déplace vers {data}...\n")
 
-
-    """----------------- BASE EVENTS --------------------"""
+    """----------------- ENVIRONMENT EVENTS --------------------"""
 
     if event_type == "found_door":
-      console.print(f"\n🚪 You found a door leading to {data}!")
+      console.print(f"\n🚪 Tu as trouvé une porte menant vers {data.leads_to}!")
+
+    if event_type == "found_chest":
+      console.print("\n🧰 Tu as trouvé un coffre!")
+
+    if event_type == "found_item":
+      console.print(f"\n🔑 You found a {data.name}!")
 
   """============================== BUILDERS =============================="""
 
