@@ -1,4 +1,4 @@
-from base import Door, Chest, Wall, Location
+from base import Door, Chest, Wall, Location, Exit
 from characters import Enemy, Hero
 from objects import Key
 
@@ -27,6 +27,9 @@ class PathEvent:
             hero.exp += enemy.dropped_exp
         
         elif isinstance(self.location, Wall):
+            self.location.trigger_event(hero)
+        
+        elif isinstance(self.location, Exit):
             self.location.trigger_event(hero)
         
         return None
