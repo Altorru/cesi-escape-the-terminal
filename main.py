@@ -1,0 +1,1 @@
+print("C'est parti pour l'aventure! 🚀\n")
