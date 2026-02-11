@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from ui import PassiveUI
 
-ui = PassiveUI()
+pui = PassiveUI()
 
 
 class Location(ABC):
@@ -23,7 +23,7 @@ class Wall(Location):
     
     def trigger_event(self, hero):
         """Le mur ne déclenche aucun événement, il bloque simplement le passage"""
-        ui.notify("blocked_move", "")
+        pui.notify("blocked_move", "")
 
 class Door(Location):
     """Représente une porte dans une zone d'exploration"""
@@ -34,7 +34,7 @@ class Door(Location):
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la porte"""
-        ui.notify("found_door", self.leads_to)
+        pui.notify("found_door", self.leads_to)
         self.is_explored = True
         return self.leads_to
 
@@ -48,9 +48,9 @@ class Chest(Location):
     
     def trigger_event(self, hero):
         """Déclenche l'événement du coffre"""
-        ui.notify("found_chest", "")
+        pui.notify("found_chest", "")
         for item in self.contents:
             hero.inventory.append(item)
             if hasattr(item, "name"):
-                ui.notify("found_item", item.name)
+                pui.notify("found_item", item.name)
         self.is_explored = True

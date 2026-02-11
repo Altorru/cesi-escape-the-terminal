@@ -1,14 +1,14 @@
 # Matrice représentant les différentes zones et leurs stages
-# Chaque None correspond à une zone explorable ouverte
+# Chaque None correspond à une zone explorable ouverte.
 # Il y a aussi 3 Classes Door, Chest, Enemy pour les événements d'exploration
-# Ces classes sont enfant de la classe Location
+# Ces classes sont enfant de la classe Location.
 
 from characters import Hero
 from ui import PassiveUI
 
-ui = PassiveUI()
+pui = PassiveUI()
 
-ui.notify("title", "")
+pui.notify("title", "")
 from exploration import MapMatrix, Exploration
 
 # Création du héros
@@ -21,4 +21,4 @@ map_matrix.show_matrix()
 exploration = Exploration(hero, map_matrix)
 exploration.start()
 
-ui.notify("finished game", "")
+pui.notify("finished game", "")

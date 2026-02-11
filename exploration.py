@@ -1,8 +1,14 @@
-import questionary
 import random
+
+import questionary
+
 from base import Door, Chest, Wall
 from characters import Enemy
 from factories import LocationFactory
+from ui import PassiveUI
+
+pui = PassiveUI()
+#aui = ActiveUI()
 
 class MapMatrix:
     def __init__(self, size):
