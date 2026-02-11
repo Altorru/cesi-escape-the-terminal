@@ -31,8 +31,10 @@ class Door(Location):
 
 class Chest(Location):
     """Représente un coffre dans une zone d'exploration"""
-    def __init__(self, contents=[]):
+    def __init__(self, contents=None):
         super().__init__()
+        if contents is None:
+          contents = []
         self.contents = contents  # Contenu du coffre (ex: arme, potion)
     
     def trigger_event(self, hero):
