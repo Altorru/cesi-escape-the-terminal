@@ -11,7 +11,7 @@ class Location(ABC):
 
 class Door(Location):
     """Représente une porte dans une zone d'exploration"""
-    def __init__(self, name, leads_to):
+    def __init__(self, name, leads_to=None):
         super().__init__()
         self.name = name
         self.leads_to = leads_to  # Zone vers laquelle la porte mène
@@ -23,7 +23,7 @@ class Door(Location):
 
 class Chest(Location):
     """Représente un coffre dans une zone d'exploration"""
-    def __init__(self, contents):
+    def __init__(self, contents=[]):
         super().__init__()
         self.contents = contents  # Contenu du coffre (ex: arme, potion)
     

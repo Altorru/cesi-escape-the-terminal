@@ -11,6 +11,7 @@ from ui import PassiveUI
 ui = PassiveUI()
 
 ui.notify("title", "")
+from exploration import MapMatrix, Exploration
 
 # Création du héros
 hero = Hero("Alex", 100, 15)
@@ -23,13 +24,17 @@ exploration_matrix = [
 ]
 
 # Simulation d'une exploration
-for i in range(len(exploration_matrix)):
-    for j in range(len(exploration_matrix[i])):
-        location = exploration_matrix[i][j]
-        if location is not None:
-            result = location.trigger_event(hero)
-            if result is not None:
-                ui.notify("character_move", result)
+# for i in range(len(exploration_matrix)):
+#     for j in range(len(exploration_matrix[i])):
+#         location = exploration_matrix[i][j]
+#         if location is not None:
+#             result = location.trigger_event(hero)
+#             if result is not None:
+#                 print(f"\n➡️ Moving to {result}...\n")
                 # Ici, vous pourriez implémenter la logique pour changer de zone d'exploration
 
-ui.notify("victory_screen", "")
+map_matrix = MapMatrix(3)
+map_matrix.generate_events()
+map_matrix.show_matrix()
+
+print("\nExploration complete! 🎉")
