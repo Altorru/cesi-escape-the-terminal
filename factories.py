@@ -16,7 +16,9 @@ class LocationFactory:
         return Door(name, leads_to)
     
     @staticmethod
-    def create_chest(contents=[]):
+    def create_chest(contents=None):
+        if contents is None:
+          contents = []
         return Chest(contents)
     
     @staticmethod
