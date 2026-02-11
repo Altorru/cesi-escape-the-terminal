@@ -34,14 +34,14 @@ class Chest(Location):
     def __init__(self, contents=None):
         super().__init__()
         if contents is None:
-          contents = []
+            contents = []
         self.contents = contents  # Contenu du coffre (ex: arme, potion)
     
     def trigger_event(self, hero):
         """Déclenche l'événement du coffre"""
-        print("\n🧰 You found a chest!")
+        ui.notify("found_chest", "")
         for item in self.contents:
             hero.inventory.append(item)
             if hasattr(item, "name"):
-                print(f"\n🔑 You found a {item.name}!")
+                ui.notify("found_item", item.name)
         self.is_explored = True
