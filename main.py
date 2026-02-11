@@ -3,7 +3,7 @@
 # Il y a aussi 3 Classes Door, Chest, Enemy pour les événements d'exploration
 # Ces classes sont enfant de la classe Location
 
-from characters import Enemy, Hero
+from characters import Hero
 from ui import PassiveUI
 
 ui = PassiveUI()
@@ -21,4 +21,4 @@ map_matrix.show_matrix()
 exploration = Exploration(hero, map_matrix)
 exploration.start()
 
-print("\nExploration complete! 🎉")
+ui.notify("finished game", "")

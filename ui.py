@@ -24,10 +24,10 @@ class PassiveUI(Observer):
         border_style="red"
       ))
 
-    if event_type == "victory_screen":
+    if event_type == "finished game":
       console.clear()
       console.print(Panel.fit(
-        "[bold red]Bravo, vous êtes sortis du terminal[/bold red]\n",
+        "[bold red]Vous avez terminé le jeu[/bold red]\n",
         border_style="red"
       ))
 
