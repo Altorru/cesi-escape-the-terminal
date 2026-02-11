@@ -1,9 +1,13 @@
-import random
-
-class Location:
+from abc import ABC, abstractmethod
+class Location(ABC):
     """Classe de base pour les différentes locations (Door, Chest, etc...)"""
     def __init__(self, can_be_explored=True):
         self.can_be_explored = can_be_explored
+    
+    @abstractmethod
+    def trigger_event(self, hero):
+        """Méthode à implémenter pour déclencher l'événement associé à la location"""
+        pass
 
 class Door(Location):
     """Représente une porte dans une zone d'exploration"""
@@ -11,9 +15,22 @@ class Door(Location):
         super().__init__()
         self.name = name
         self.leads_to = leads_to  # Zone vers laquelle la porte mène
+    
+    def trigger_event(self, hero):
+        """Déclenche l'événement de la porte"""
+        print(f"\n🚪 You found a door leading to {self.leads_to}!")
+        return self.leads_to
 
 class Chest(Location):
     """Représente un coffre dans une zone d'exploration"""
     def __init__(self, contents):
         super().__init__()
         self.contents = contents  # Contenu du coffre (ex: arme, potion)
+    
+    def trigger_event(self, hero):
+        """Déclenche l'événement du coffre"""
+        print("\n🧰 You found a chest!")
+        for item in self.contents:
+            hero.inventory.append(item)
+            if hasattr(item, "name"):
+                print(f"\n🔑 You found a {item.name}!")
