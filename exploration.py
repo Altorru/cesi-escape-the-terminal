@@ -11,11 +11,11 @@ pui = PassiveUI()
 aui = ActiveUI()
 
 class MapMatrix:
-    def __init__(self, size):
+    def __init__(self, size, exploration=None):
         self.size = size
-        self.matrix = self.generate_procedural_map()
+        self.matrix = self.generate_procedural_map(exploration)
     
-    def generate_procedural_map(self):
+    def generate_procedural_map(self, exploration):
         """Génère une matrice de la carte avec premièrement des murs pour créer des chemins, puis ajoute des événements aléatoires dans les cases restantes"""
         # Étape 1 : Générer des murs pour créer au moins un chemin de la position de départ (0, 0) à la position d'arrivée (size-1, size-1)
         # Parcourir en démarrant de 0 0 aléatoirement vers le bas ou la droite, et ajouter des murs aléatoires sur les cases non visitées
@@ -47,21 +47,22 @@ class MapMatrix:
         for i in range(self.size):
             for j in range(self.size):
                 if self.matrix[i][j] is None:  # Si la case n'est pas un mur
-                    self.matrix[i][j] = self.generate_random_event()
+                    self.matrix[i][j] = self.generate_random_event(exploration)
 
         self.matrix[0][0] = None  # Assurer que la position de départ est vide
         self.matrix[self.size - 1][self.size - 1] = Exit()  # Assurer que la position d'arrivée est une sortie
         return self.matrix
 
     @staticmethod
-    def generate_random_event():
+    def generate_random_event(exploration):
         """Génère un événement aléatoire"""
         event_types = [None, Portal, Chest, Enemy]  # Ajouter None pour les cases vides
+        weights = [0.4, 0.1, 0.25, 0.25] # Pondération pour favoriser les cases vides
 
-        chosen_event_type = random.choice(event_types)
+        chosen_event_type = random.choices(event_types, weights=weights, k=1)[0]
 
         if chosen_event_type is Portal:
-            return LocationFactory.create_portal()
+            return LocationFactory.create_portal(exploration)
         elif chosen_event_type is Chest:
             return LocationFactory.create_chest()
         elif chosen_event_type is Enemy:
@@ -77,15 +78,20 @@ class MapMatrix:
 class Exploration:
     def __init__(self, player, level=1):
         self.player = player
-        self.map = MapMatrix(5)
+        self.map = MapMatrix(5, self)
         self.current_position = (0, 0)  # Position de départ
         self.level = level
     
-    def next_level(self):
+    def __str__(self):
+        return f"Exploration Level {self.level}"    
+    
+    def next_level(self, delta=1):
         """Passe au niveau suivant en générant une nouvelle carte et en réinitialisant la position du joueur"""
-        self.level += 1
-        self.map = MapMatrix(5 + (self.level * 2)) # Augmenter la taille de la carte à chaque niveau
+        self.level += delta
+        self.map = MapMatrix(5 + self.level, self) # Augmenter la taille de la carte à chaque niveau
         self.current_position = (0, 0)
+        print(f"\n🎉 Welcome to {self}!")
+        self.map.show_matrix()
 
     def move_player(self, direction):
         """Déplace le joueur dans la matrice en fonction de la direction choisie"""

@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 from ui import PassiveUI
+import questionary
+import random
 
 pui = PassiveUI()
 
@@ -36,21 +38,26 @@ class Exit(Location):
 
 class Portal(Location):
     """Représente un portail vers une prochaine zone ou un autre portail"""
-    def __init__(self, name, leads_to=None):
+    def __init__(self, name, exploration):
         super().__init__()
         self.name = name
-        self.leads_to = leads_to  # Zone vers laquelle la porte mène
+        self.exploration = exploration
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la porte"""
-        if isinstance(self.leads_to, self.__class__):
-            pui.notify("found_portal", self.leads_to.name)
-        elif isinstance(self.leads_to, any):
-            pui.notify("found_portal", "Niveau "+str(self.leads_to.level))
+        if self.exploration:
+            next_level = random.randint(1, 3) # Simuler la génération d'un prochain niveau
+            next_level_str = f"Level {self.exploration.level + next_level}"
+            pui.notify("found_portal", next_level_str)
+            # Select to use or not the portal
+            use_portal = questionary.confirm( f"Veux-tu utiliser le portail pour aller vers {next_level_str} ?" ).ask()
+            if use_portal:
+                self.exploration.next_level(next_level)
+                return self.exploration
         else:
             pui.notify("found_portal", "nulle part")
         self.is_explored = True
-        return self.leads_to
+        return self.exploration 
 
 class Chest(Location):
     """Représente un coffre dans une zone d'exploration"""

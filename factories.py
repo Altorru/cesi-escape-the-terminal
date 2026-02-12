@@ -7,13 +7,13 @@ from characters import Enemy
 class LocationFactory:
     """Factory pour créer des instances de Portal, Chest, Enemy, etc..."""
     @staticmethod
-    def create_portal(leads_to=None):
+    def create_portal(exploration):
         names = ["un Portail Secret",
                  "un Portail Mystérieux",
                  "un Portail caché",
                  "un Portail Ancien"]
         name = random.choice(names)
-        return Portal(name, leads_to)
+        return Portal(name, exploration)
     
     @staticmethod
     def create_chest(contents=None):
