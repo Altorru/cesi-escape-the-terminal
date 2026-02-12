@@ -3,7 +3,10 @@ from abc import ABC, abstractmethod
 import questionary
 from rich.console import Console
 from rich.panel import Panel
-import keyboard
+
+import sys
+import termios
+import tty
 
 console = Console()
 
@@ -126,19 +129,40 @@ class ActiveUI(Observer):
         if event_type == "next_move":
             print("Utilisez les flèches pour vous déplacer et 'esc' pour quitter.")
             while True:
-                event = keyboard.read_event()
-                if event.event_type == keyboard.KEY_DOWN:
-                    if event.name == "up":
-                        return "Haut      ⮝"
-                    elif event.name == "right":
-                        return "Droite    ⮞"
-                    elif event.name == "down":
-                        return "Bas       ⮟"
-                    elif event.name == "left":
-                        return "Gauche    ⮜"
-                    elif event.name == "esc":
-                        return "Quitter"
+                key = get_key()
+                if key == "up":
+                    return "Haut      ⮝"
+                elif key == "right":
+                    return "Droite    ⮞"
+                elif key == "down":
+                    return "Bas       ⮟"
+                elif key == "left":
+                    return "Gauche    ⮜"
+                elif key == "esc":
+                    return "Quitter"
 
         """============================== BUILDERS =============================="""
 
         """============================== Colorizer =============================="""
+
+def get_key():
+    old_settings = termios.tcgetattr(sys.stdin)
+    try:
+        tty.setraw(sys.stdin.fileno())
+        char = sys.stdin.read(1)
+        if char == '\x1b':  # Special key
+            char2 = sys.stdin.read(2)
+            if char2 == '[A':
+                return "up"
+            elif char2 == '[B':
+                return "down"
+            elif char2 == '[C':
+                return "right"
+            elif char2 == '[D':
+                return "left"
+            return "esc"
+        elif char == '\x03':  # Ctrl+C
+            return "esc"
+        return char
+    finally:
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
