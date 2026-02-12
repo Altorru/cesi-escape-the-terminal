@@ -1,5 +1,7 @@
-import questionary
 import random
+
+import questionary
+
 from base import Door, Chest, Wall, Exit
 from characters import Enemy
 from factories import LocationFactory
@@ -14,7 +16,7 @@ class MapMatrix:
         self.matrix = [[None for _ in range(size)] for _ in range(size)]
     
     def generate_procedural_map(self):
-        """Génère une matrice de la carte avec premierement des murs pour créer des chemins, puis ajoute des événements aléatoires dans les cases restantes"""
+        """Génère une matrice de la carte avec premièrement des murs pour créer des chemins, puis ajoute des événements aléatoires dans les cases restantes"""
         # Étape 1 : Générer des murs pour créer au moins un chemin de la position de départ (0, 0) à la position d'arrivée (size-1, size-1)
         # Parcourir en démarrant de 0 0 aléatoirement vers le bas ou la droite, et ajouter des murs aléatoires sur les cases non visitées
         x, y = 0, 0
@@ -49,7 +51,8 @@ class MapMatrix:
         self.matrix[0][0] = None  # Assurer que la position de départ est vide
         self.matrix[self.size - 1][self.size - 1] = Exit()  # Assurer que la position d'arrivée est une sortie
 
-    def generate_random_event(self):
+    @staticmethod
+    def generate_random_event():
         """Génère un événement aléatoire"""
         event_types = [None, Door, Chest, Enemy]  # Ajouter None pour les cases vides
 
@@ -70,9 +73,9 @@ class MapMatrix:
             print(" | ".join([str(type(event).__name__) if event else "Empty" for event in row]))
 
 class Exploration:
-    def __init__(self, player, map):
+    def __init__(self, player, world_map):
         self.player = player
-        self.map = map
+        self.map = world_map
         self.current_position = (0, 0)  # Position de départ
 
     def move_player(self, direction):
