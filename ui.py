@@ -31,45 +31,54 @@ class PassiveUI(Observer):
         border_style="red"
       ))
 
-    """----------------- CHARACTER EVENTS --------------"""
-    if event_type == "character_move":
-      console.print(f"\n➡️ On se déplace vers {data}...\n")
-
     """----------------- ENVIRONMENT EVENTS --------------------"""
 
+    if event_type == "moved_to_position":
+      console.print(f"\nDéplacement vers {data}")
+
+    if event_type == "hit_outer_border":
+      console.print("\n[red]Tu ne peux sortir de la carte ![red]")
+
+    if event_type == "hit_wall":
+      console.print("\n[yellow]Tu t'est mangé un [yellow]mur[yellow] ![yellow]")
+
+    if event_type == "already_explored":
+      console.print("\n Tu as déjà exploré cette zone. [i]Rien ne se passe.[/i]")
+
+    """------------------- OBJECT EVENTS ----------------"""
+
     if event_type == "found_portal":
-      console.print(f"\nTu as trouvé un portail menant vers [purple]{data}[purple]!")
+      console.print(f"\nTu as trouvé un portail menant vers [purple]{data}[/purple]!")
 
     if event_type == "found_chest":
-      console.print("\nTu as trouvé un [green]coffre[green]!")
+      console.print("\nTu as trouvé un [green]coffre[/green]!")
 
     if event_type == "found_item":
-      console.print(f"\nTu as trouvé [bold yellow]{data.name}![bold yellow]"
+      console.print(f"\nTu as trouvé [bold yellow]{data.name}![/bold yellow]"
                     f"(Ouvre: {data.opens}")
 
-    if event_type == "blocked_move":
-      console.print("\n[bold red]Tu as pris un mur ![bold red]"
-                    " Tu ne peux pas aller dans cette direction.")
-
     if event_type == "enemy_encounter":
-      console.print(f"\nTu est tombé sur [red]{data.name}[red]!"
+      console.print(f"\nTu est tombé sur [bold red]{data.name}[/bold red]!"
                     f"(HP: {data.health}, DMG: {data.attack})")
 
     if event_type == "enemy_defeated":
-      console.print(f"\n Tu as battu [red]{data.name}[red] "
-                    f"et gagné [blue]{data.dropped_exp} EXP![blue]")
-    """============================== BUILDERS =============================="""
+      console.print(f"\nTu as battu [red]{data.name}[red] "
+                    f"et gagné [blue]{data.dropped_exp} EXP ![blue]")
 
-    """============================== Colorizer ======x========================"""
+    """============================== BUILDERS =============================="""
+    """---------------- ENVIRONMENT BUILDING BLOCKS--------------------"""
+
+    if event_type == "separator":
+      console.print(f" | ".join(
+        [str(type(event).__name__) if event else "Empty" for event in data]))
+
+    """============================== Colorizer ==============================="""
 
 class ActiveUI(Observer):
 
-  """============================== PRINTERS =====x========================="""
+  """============================== PRINTERS ==============================="""
   def notify(self, event_type, data):
-    if event_type == "separator":
-      console.print(f" | ".join(
-      [str(type(event).__name__) if event else "Empty" for event in data]))
 
-  """============================== BUILDERS =============================="""
+    """============================== BUILDERS =============================="""
 
-  """============================== Colorizer =============================="""
+    """============================== Colorizer =============================="""
