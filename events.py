@@ -25,7 +25,7 @@ class PathEvent:
         elif isinstance(self.location, Enemy):
             enemy = self.location
             pui.notify("enemy_encounter", enemy)
-            print(f"\n🎉 You defeated the {enemy.name} and gained {enemy.dropped_exp} EXP!")
+            pui.notify("enemy_defeated", enemy)
             hero.exp += enemy.dropped_exp
         
         elif isinstance(self.location, Wall):
