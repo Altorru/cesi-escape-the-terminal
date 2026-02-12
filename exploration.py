@@ -1,6 +1,6 @@
 import questionary
 import random
-from base import Door, Chest, Wall, Exit
+from base import Portal, Chest, Wall, Exit
 from characters import Enemy
 from factories import LocationFactory
 from ui import PassiveUI
@@ -53,12 +53,12 @@ class MapMatrix:
 
     def generate_random_event(self):
         """Génère un événement aléatoire"""
-        event_types = [None, Door, Chest, Enemy]  # Ajouter None pour les cases vides
+        event_types = [None, Portal, Chest, Enemy]  # Ajouter None pour les cases vides
 
         chosen_event_type = random.choice(event_types)
 
-        if chosen_event_type is Door:
-            return LocationFactory.create_door()
+        if chosen_event_type is Portal:
+            return LocationFactory.create_Portal()
         elif chosen_event_type is Chest:
             return LocationFactory.create_chest()
         elif chosen_event_type is Enemy:

@@ -1,19 +1,19 @@
 import random
 
-from base import Door, Chest
+from base import Portal, Chest
 from characters import Enemy
 
 
 class LocationFactory:
-    """Factory pour créer des instances de Door, Chest, Enemy, etc..."""
+    """Factory pour créer des instances de Portal, Chest, Enemy, etc..."""
     @staticmethod
-    def create_door(leads_to=None):
-        names = ["une Porte Secrete",
-                 "une Porte Mystérieuse",
-                 "une Porte cachée",
-                 "une Porte Ancienne"]
+    def create_portal(leads_to=None):
+        names = ["un Portail Secret",
+                 "un Portail Mystérieux",
+                 "un Portail caché",
+                 "un Portail Ancien"]
         name = random.choice(names)
-        return Door(name, leads_to)
+        return Portal(name, leads_to)
     
     @staticmethod
     def create_chest(contents=None):

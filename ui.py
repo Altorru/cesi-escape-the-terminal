@@ -37,8 +37,8 @@ class PassiveUI(Observer):
 
     """----------------- ENVIRONMENT EVENTS --------------------"""
 
-    if event_type == "found_door":
-      console.print(f"\nTu as trouvé une porte menant vers [purple]{data}[purple]!")
+    if event_type == "found_portal":
+      console.print(f"\nTu as trouvé un portail menant vers [purple]{data}[purple]!")
 
     if event_type == "found_chest":
       console.print("\nTu as trouvé un [green]coffre[green]!")
