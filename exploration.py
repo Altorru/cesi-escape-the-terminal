@@ -113,7 +113,6 @@ class Exploration:
             self.map.matrix[self.current_position[0]][self.current_position[1]].trigger_event(self.player)
             self.current_position = (x, y)  # Revert to the previous position
             return False
-        pui.notify("show_current_map", [self.map.matrix, self.current_position] )
         return True
     
     def trigger_current_event(self):
@@ -131,6 +130,7 @@ class Exploration:
         """Démarre l'exploration de la matrice"""
         previous_position_valid = True
         while True:
+            pui.notify("show_current_map", [self.map.matrix, self.current_position] )
             if previous_position_valid:
                 self.trigger_current_event()
 
@@ -145,5 +145,6 @@ class Exploration:
                 break
             
             previous_position_valid = self.move_player(next_move)
+
     
     
