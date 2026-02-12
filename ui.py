@@ -60,12 +60,15 @@ class PassiveUI(Observer):
                     f"et gagné [blue]{data.dropped_exp} EXP![blue]")
     """============================== BUILDERS =============================="""
 
-    """============================== Colorizer =============================="""
-
+    """============================== Colorizer ======x========================"""
 
 class ActiveUI(Observer):
 
-  """============================== PRINTERS =============================="""
+  """============================== PRINTERS =====x========================="""
+  def notify(self, event_type, data):
+    if event_type == "separator":
+      console.print(f" | ".join(
+      [str(type(event).__name__) if event else "Empty" for event in data]))
 
   """============================== BUILDERS =============================="""
 
