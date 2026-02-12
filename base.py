@@ -6,7 +6,7 @@ pui = PassiveUI()
 
 
 class Location(ABC):
-    """Classe de base pour les différentes locations (Door, Chest, etc...)"""
+    """Classe de base pour les différentes locations (Portal, Chest, etc...)"""
     def __init__(self, can_be_explored=True):
         self.can_be_explored = can_be_explored
         self.is_explored = False
@@ -35,8 +35,8 @@ class Exit(Location):
         pui.notify("found_exit", "")
         self.is_explored = True
 
-class Door(Location):
-    """Représente une porte dans une zone d'exploration"""
+class Portal(Location):
+    """Représente un portail vers une prochaine zone dans une zone d'exploration"""
     def __init__(self, name, leads_to=None):
         super().__init__()
         self.name = name
@@ -44,7 +44,7 @@ class Door(Location):
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la porte"""
-        pui.notify("found_door", self.leads_to)
+        pui.notify("found_portal", self.leads_to)
         self.is_explored = True
         return self.leads_to
 

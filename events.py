@@ -1,4 +1,4 @@
-from base import Door, Chest, Wall, Location, Exit
+from base import Portal, Chest, Wall, Location, Exit
 from characters import Enemy, Hero
 from objects import Key
 from ui import PassiveUI
@@ -12,7 +12,7 @@ class PathEvent:
 
     def trigger_event(self, hero:Hero):
         """Déclenche l'événement associé à la location"""
-        if isinstance(self.location, Door):
+        if isinstance(self.location, Portal):
             pui.notify("blocked_move", self.location.leads_to)
             return self.location.leads_to
         
