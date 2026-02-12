@@ -99,7 +99,8 @@ class Exploration:
         # Augmenter la taille de la carte à chaque niveau
         self.map = MapMatrix(5 + self.level, self)
         self.current_position = (0, 0)
-        print(f"\n🎉 Welcome to {self}!")
+        pui.notify("clear_screen", "")
+        pui.notify("welcome_to_level",  self)
         pui.notify("show_current_map", [self.map.matrix, self.current_position])
 
     def move_player(self, direction):
@@ -122,10 +123,8 @@ class Exploration:
                 can_be_explored):
             (self.map.matrix[self.current_position[0]][self.current_position[1]]
              .trigger_event(self.player))
-            pui.notify("hit_wall", "")
             self.current_position = (x, y)  # Revert to the previous position
             return False
-        pui.notify("moved_to_position", self.current_position)
         return True
 
     def trigger_current_event(self):
@@ -142,6 +141,7 @@ class Exploration:
 
     def start(self):  # Move with questionary
         """Démarre l'exploration de la matrice"""
+        pui.notify("clear_screen", "")
         previous_position_valid = True
         while True:
             pui.notify("show_current_map",
@@ -153,7 +153,6 @@ class Exploration:
             next_move = aui.notify("next_move", "")
 
             if next_move == "Quitter":
-                pui.notify("player_quit", "")
                 break
 
             previous_position_valid = self.move_player(next_move)

@@ -1,12 +1,11 @@
-from abc import ABC, abstractmethod
-
-import questionary
-from rich.console import Console
-from rich.panel import Panel
-
 import sys
 import termios
 import tty
+from abc import ABC, abstractmethod
+
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
 
 console = Console()
 
@@ -30,24 +29,9 @@ class PassiveUI(Observer):
                 border_style="red"
             ))
 
-        if event_type == "finished game":
-            console.clear()
-            console.print(Panel.fit(
-                "[bold red]Vous avez terminé le jeu[/bold red]\n",
-                border_style="red"
-            ))
-
         """------------------- ENGINE EVENTS ----------------"""
         if event_type == "clear_screen":
             console.clear()
-
-        """------------------- PLAYER EVENTS ----------------"""
-
-        if event_type == "player_quit":
-            console.print("\nJeux terminé. Tchao! 👋")
-
-        if event_type == "moved_to_position":
-            console.print(f"\nDéplacement vers {data}")
 
         """----------------- ENVIRONMENT EVENTS --------------------"""
 
@@ -63,6 +47,9 @@ class PassiveUI(Observer):
 
         if event_type == "empty_area":
             console.print("\n[orange]Il n'y a rien ici.[/orange]")
+
+        if event_type == "welcome_to_level":
+            console.print(f"\n[bold green]Niveau {data} ![/bold green]")
 
         """------------------- OBJECT EVENTS ----------------"""
 
@@ -95,8 +82,6 @@ class PassiveUI(Observer):
                  data]))
 
         if event_type == "show_current_map":
-            from rich.table import Table
-
             # data contains data[matrix]: matrice d'objets, data[current_position]: tuple
             matrix = data[0]
             current_position = data[1]
@@ -125,7 +110,6 @@ class PassiveUI(Observer):
                         row_items.append(" ")
                 table.add_row(*row_items)
 
-            console.clear()
             console.print(Panel.fit(table, border_style="blue", title="Map"))
 
         """============================== Colorizer ==============================="""

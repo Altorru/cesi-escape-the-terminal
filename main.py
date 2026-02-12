@@ -4,8 +4,8 @@
 # Ces classes sont enfant de la classe Location.
 
 from characters import Hero
-from ui import PassiveUI
 from exploration import Exploration
+from ui import PassiveUI
 
 pui = PassiveUI()
 
@@ -16,5 +16,3 @@ hero = Hero("Alex", 100, 15)
 
 exploration = Exploration(hero)
 exploration.start()
-
-pui.notify("finished game", "")
