@@ -1,12 +1,14 @@
-import questionary
 import random
+
+import questionary
+
 from base import Portal, Chest, Wall, Exit
 from characters import Enemy
 from factories import LocationFactory
-from ui import PassiveUI
+from ui import PassiveUI, ActiveUI
 
 pui = PassiveUI()
-#aui = ActiveUI()
+aui = ActiveUI()
 
 class MapMatrix:
     def __init__(self, size):
@@ -59,7 +61,7 @@ class MapMatrix:
         chosen_event_type = random.choice(event_types)
 
         if chosen_event_type is Portal:
-            return LocationFactory.create_Portal()
+            return LocationFactory.create_portal()
         elif chosen_event_type is Chest:
             return LocationFactory.create_chest()
         elif chosen_event_type is Enemy:
@@ -70,7 +72,7 @@ class MapMatrix:
     def show_matrix(self):
         """Affiche la matrice de la carte"""
         for row in self.matrix:
-            print(" | ".join([str(type(event).__name__) if event else "Empty" for event in row]))
+            aui.notify("separator", row)
 
 class Exploration:
     def __init__(self, player, world_map):
