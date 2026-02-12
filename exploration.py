@@ -96,7 +96,7 @@ class Exploration:
             return False
         if self.map.matrix[self.current_position[0]][self.current_position[1]] and not self.map.matrix[self.current_position[0]][self.current_position[1]].can_be_explored:
             print("\n🚧 You hit a wall! You can't go that way.")
-            self.current_position = (x, y)  # Revert to previous position
+            self.current_position = (x, y)  # Revert to the previous position
             return False
         print (f"\n➡️ Moved to position {self.current_position}...")
         return True
