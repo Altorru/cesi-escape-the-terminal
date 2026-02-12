@@ -21,6 +21,7 @@ class Wall(Location):
     """Représente un mur infranchissable dans une zone d'exploration"""
     def __init__(self):
         super().__init__(can_be_explored=False)
+        self.emoji = "🧱"
     
     def trigger_event(self, hero):
         """Le mur ne déclenche aucun événement, il bloque simplement le passage"""
@@ -31,6 +32,7 @@ class Exit(Location):
     def __init__(self, exploration=None):
         super().__init__(can_be_explored=True)
         self.exploration = exploration
+        self.emoji = "🚪"
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la sortie"""
@@ -44,6 +46,7 @@ class Portal(Location):
         super().__init__()
         self.name = name
         self.exploration = exploration
+        self.emoji = "🌀"
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la porte"""
@@ -68,6 +71,7 @@ class Chest(Location):
         if contents is None:
             contents = []
         self.contents = contents  # Contenu du coffre (ex: arme, potion)
+        self.emoji = "📦"
     
     def trigger_event(self, hero):
         """Déclenche l'événement du coffre"""

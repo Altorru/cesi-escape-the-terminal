@@ -15,7 +15,6 @@ pui.notify("title", "")
 hero = Hero("Alex", 100, 15)
 
 exploration = Exploration(hero)
-exploration.map.show_matrix()
+pui.notify("show_current_map", (exploration.map.matrix, (0, 0)))
 exploration.start()
-
 pui.notify("finished game", "")

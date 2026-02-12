@@ -31,6 +31,29 @@ class PassiveUI(Observer):
         border_style="red"
       ))
 
+    if event_type == "show_current_map":
+      # data containts data[matrix]: matrice d'objets, data[current_position]: tuple
+      # Border style then show the map matrix with the position of the player and the explored zones, else empty zones
+      console.clear()
+
+      def get_emoji(position, matrix):
+        return matrix[position[0]][position[1]].emoji if matrix[position[0]][position[1]] else "⬜"
+
+      map_str = ""
+      matrix = data[0]
+      current_position = data[1]
+      for y, row in enumerate(matrix):
+          for x, cell in enumerate(row):
+            if (y, x) == current_position:
+              map_str += "🧑 "  # Emoji for the player
+            elif cell and getattr(cell, "is_explored", False):
+              map_str += get_emoji((y, x), matrix) + " "
+            else:
+              map_str += "⬜ "
+          map_str += "\n"
+
+      console.print(Panel.fit(map_str, border_style="blue", title="Map"))
+
     """----------------- ENVIRONMENT EVENTS --------------------"""
 
     if event_type == "moved_to_position":

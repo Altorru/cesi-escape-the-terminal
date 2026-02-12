@@ -25,6 +25,7 @@ class Enemy(Character, Location):
         self.dropped_exp = dropped_exp
         self.is_explored = False
         self.can_be_explored = True
+        self.emoji = "👹"
     
     def trigger_event(self, hero):
         """Déclenche l'événement de combat avec l'ennemi, juste mettre des dégats et récuperer de l'xp à la fin du combat"""

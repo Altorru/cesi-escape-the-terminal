@@ -91,7 +91,7 @@ class Exploration:
         self.map = MapMatrix(5 + self.level, self) # Augmenter la taille de la carte à chaque niveau
         self.current_position = (0, 0)
         print(f"\n🎉 Welcome to {self}!")
-        self.map.show_matrix()
+        pui.notify("show_current_map", [self.map.matrix, self.current_position] )
 
     def move_player(self, direction):
         """Déplace le joueur dans la matrice en fonction de la direction choisie"""
@@ -113,7 +113,7 @@ class Exploration:
             pui.notify("hit_wall", "")
             self.current_position = (x, y)  # Revert to the previous position
             return False
-        pui.notify("moved_to_position", self.current_position )
+        pui.notify("show_current_map", [self.map.matrix, self.current_position] )
         return True
     
     def trigger_current_event(self):
