@@ -119,7 +119,7 @@ class Exploration:
     def trigger_current_event(self):
         """Déclenche l'événement de la case actuelle"""
         current_event = self.map.matrix[self.current_position[0]][self.current_position[1]]
-        if current_event and not current_event.is_explored:
+        if current_event and (not current_event.is_explored or isinstance(current_event, Portal)):
             current_event.trigger_event(self.player)
             if isinstance(current_event, Exit):
                 exit(0)
