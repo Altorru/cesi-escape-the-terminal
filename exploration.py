@@ -72,7 +72,7 @@ class MapMatrix:
     def show_matrix(self):
         """Affiche la matrice de la carte"""
         for row in self.matrix:
-            aui.notify("separator", row)
+            pui.notify("separator", row)
 
 class Exploration:
     def __init__(self, player, world_map):
@@ -92,13 +92,15 @@ class Exploration:
         elif direction == "Right" and y < self.map.size - 1:
             self.current_position = (x, y + 1)
         else:
-            print("\n🚫 You can't move in that direction!")
+            pui.notify("hit_outer_border", "")
             return False
-        if self.map.matrix[self.current_position[0]][self.current_position[1]] and not self.map.matrix[self.current_position[0]][self.current_position[1]].can_be_explored:
-            print("\n🚧 You hit a wall! You can't go that way.")
+        if (self.map.matrix[self.current_position[0]][self.current_position[1]]
+            and not self.map.matrix[self.current_position[0]][self.current_position[1]].
+                can_be_explored):
+            pui.notify("hit_wall", "")
             self.current_position = (x, y)  # Revert to the previous position
             return False
-        print (f"\n➡️ Moved to position {self.current_position}...")
+        pui.notify("moved_to_position", self.current_position )
         return True
     
     def trigger_current_event(self):
@@ -109,6 +111,7 @@ class Exploration:
             if isinstance(current_event, Exit):
                 exit(0)
         elif current_event and current_event.is_explored:
+            pui.notify("already_explored", "")
             print("\n🔁 You've already explored this area. Nothing happens.")
         else:
             print("\n🌳 This area is empty. Nothing happens.")
