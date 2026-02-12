@@ -44,6 +44,16 @@ class MapMatrix:
                     # 50% de chance d'ajouter un mur
                     not in safe_zones and random.random() < 0.5):
                     self.matrix[i][j] = Wall()
+        
+        # Ajouter X portails aléatoires dans une case vide (1 portail tous les 5 niveaux)
+        num_portals = max(1, exploration.level // 5)
+        print(f"Generating {num_portals} portals for level {exploration.level}")
+        for num in range(num_portals):
+            while True:
+                x, y = random.randint(0, self.size - 1), random.randint( 0, self.size - 1)
+                if self.matrix[x][y] is None: # Si la case est vide
+                    self.matrix[x][y] = Portal(f"Portal {num + 1}", exploration)
+                    break
 
         # Étape 2 : Ajouter des événements aléatoires dans les cases restantes
         # (celles qui ne sont pas des murs)
@@ -61,15 +71,13 @@ class MapMatrix:
     def generate_random_event(exploration):
         """Génère un événement aléatoire"""
         # Ajouter None pour les cases vides
-        event_types = [None, Portal, Chest, Enemy]
+        event_types = [None, Chest, Enemy]
         # Pondération pour favoriser les cases vides
-        weights = [0.4, 0.1, 0.25, 0.25]
+        weights = [0.5, 0.25, 0.25]
 
         chosen_event_type = random.choices(event_types, weights=weights, k=1)[0]
 
-        if chosen_event_type is Portal:
-            return LocationFactory.create_portal(exploration)
-        elif chosen_event_type is Chest:
+        if chosen_event_type is Chest:
             return LocationFactory.create_chest()
         elif chosen_event_type is Enemy:
             return LocationFactory.create_enemy()
@@ -85,9 +93,9 @@ class MapMatrix:
 class Exploration:
     def __init__(self, player, level=1):
         self.player = player
+        self.level = level
         self.map = MapMatrix(5, self)
         self.current_position = (0, 0)
-        self.level = level
 
     def __str__(self):
         return f"Exploration Level {self.level}"
