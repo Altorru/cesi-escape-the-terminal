@@ -90,7 +90,10 @@ class PassiveUI(Observer):
         if event_type == "found_item":
             console.print(
                 f"\nTu as trouvé [bold yellow]{data.name}![/bold yellow]"
-                f"(Ouvre: {data.opens}")
+                f"(Ouvre: [purple]{data.opens.name})[/purple]")
+        
+        if event_type == "portal_locked":
+            console.print("\n[red]Ce portail est verrouillé ! Trouve la clé pour l'ouvrir.[/red]")
 
         if event_type == "enemy_encounter":
             console.print(
