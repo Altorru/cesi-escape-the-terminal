@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-
 from ui import PassiveUI
 
 pui = PassiveUI()
@@ -36,7 +35,7 @@ class Exit(Location):
         self.is_explored = True
 
 class Portal(Location):
-    """Représente un portail vers une prochaine zone dans une zone d'exploration"""
+    """Représente un portail vers une prochaine zone ou un autre portail"""
     def __init__(self, name, leads_to=None):
         super().__init__()
         self.name = name
@@ -44,7 +43,12 @@ class Portal(Location):
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la porte"""
-        pui.notify("found_portal", self.leads_to)
+        if isinstance(self.leads_to, self.__class__):
+            pui.notify("found_portal", self.leads_to.name)
+        elif isinstance(self.leads_to, any):
+            pui.notify("found_portal", "Niveau "+str(self.leads_to.level))
+        else:
+            pui.notify("found_portal", "nulle part")
         self.is_explored = True
         return self.leads_to
 

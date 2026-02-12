@@ -75,10 +75,17 @@ class MapMatrix:
             aui.notify("separator", row)
 
 class Exploration:
-    def __init__(self, player, world_map):
+    def __init__(self, player, level=1):
         self.player = player
-        self.map = world_map
+        self.map = MapMatrix(5)
         self.current_position = (0, 0)  # Position de départ
+        self.level = level
+    
+    def next_level(self):
+        """Passe au niveau suivant en générant une nouvelle carte et en réinitialisant la position du joueur"""
+        self.level += 1
+        self.map = MapMatrix(5 + (self.level * 2)) # Augmenter la taille de la carte à chaque niveau
+        self.current_position = (0, 0)
 
     def move_player(self, direction):
         """Déplace le joueur dans la matrice en fonction de la direction choisie"""
