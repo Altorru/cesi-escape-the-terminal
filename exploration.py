@@ -93,13 +93,14 @@ class Exploration:
         return f"Exploration Level {self.level}"
 
     def next_level(self, delta=1):
-        """Passe au niveau suivant en générant une nouvelle carte et en réinitialisant la position du joueur"""
+        """Passe au niveau suivant en générant une nouvelle carte et en
+        réinitialisant la position du joueur"""
         self.level += delta
         # Augmenter la taille de la carte à chaque niveau
         self.map = MapMatrix(5 + self.level, self)
         self.current_position = (0, 0)
         print(f"\n🎉 Welcome to {self}!")
-        pui.notify("show_current_map", [self.map.matrix, self.current_position] )
+        pui.notify("show_current_map", [self.map.matrix, self.current_position])
 
     def move_player(self, direction):
         """Déplace le joueur dans la matrice en fonction de la direction choisie"""
@@ -119,7 +120,8 @@ class Exploration:
             and not self.map.matrix[self.current_position[0]][
                 self.current_position[1]].
                 can_be_explored):
-            self.map.matrix[self.current_position[0]][self.current_position[1]].trigger_event(self.player)
+            (self.map.matrix[self.current_position[0]][self.current_position[1]]
+             .trigger_event(self.player))
             pui.notify("hit_wall", "")
             self.current_position = (x, y)  # Revert to the previous position
             return False
@@ -142,7 +144,8 @@ class Exploration:
         """Démarre l'exploration de la matrice"""
         previous_position_valid = True
         while True:
-            pui.notify("show_current_map", [self.map.matrix, self.current_position] )
+            pui.notify("show_current_map",
+                       [self.map.matrix, self.current_position])
             if previous_position_valid:
                 self.trigger_current_event()
 
