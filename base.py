@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from ui import PassiveUI
 import questionary
 import random
+from objects import Key
 
 pui = PassiveUI()
 
@@ -48,6 +49,7 @@ class Portal(Location):
         self.name = name
         self.exploration = exploration
         self.emoji = "🌀"
+        self.is_locked = True # Par défaut, le portail est verrouillé et nécessite une clé pour être utilisé
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la porte"""
@@ -55,11 +57,14 @@ class Portal(Location):
             next_level = random.randint(1, 3) # Simuler la génération d'un prochain niveau
             next_level_str = f"Level {self.exploration.level + next_level}"
             pui.notify("found_portal", next_level_str)
-            # Select to use or not the portal
-            use_portal = questionary.confirm( f"Veux-tu utiliser le portail pour aller vers {next_level_str} ?" ).ask()
-            if use_portal:
-                self.exploration.next_level(next_level)
-                return self.exploration
+            if self.is_locked and hero.inventory and any(isinstance(item, Key) and item.opens == self for item in hero.inventory):
+                # Select to use or not the portal
+                use_portal = questionary.confirm( f"Veux-tu utiliser le portail pour aller vers {next_level_str} ?" ).ask()
+                if use_portal:
+                    self.exploration.next_level(next_level)
+                    return self.exploration
+            else:
+                pui.notify("portal_locked", "")
         else:
             pui.notify("found_portal", "nulle part")
         self.is_explored = True
@@ -80,5 +85,5 @@ class Chest(Location):
         for item in self.contents:
             hero.inventory.append(item)
             if hasattr(item, "name"):
-                pui.notify("found_item", item.name)
+                pui.notify("found_item", item)
         self.is_explored = True

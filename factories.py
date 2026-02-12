@@ -1,6 +1,7 @@
 import random
 
 from base import Portal, Chest
+from objects import Key
 from characters import Enemy
 
 
@@ -34,3 +35,10 @@ class LocationFactory:
                      enemy_info["health"],
                      enemy_info["attack"],
                      enemy_info["reward"])
+class ObjectFactory():
+    """Factory pour créer des instances d'objets (Weapon, Potion, Key, etc...)"""
+    @staticmethod
+    def create_key(opens):
+        names = ["une Clé en Fer", "une Clé en Or", "une Clé en Argent"]
+        name = random.choice(names)
+        return Key(name, opens)
