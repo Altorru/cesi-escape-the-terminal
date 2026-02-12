@@ -164,3 +164,4 @@ class ActiveUI(Observer):
                     return "Gauche"
                 elif key == "esc":
                     return "Quitter"
+        return None

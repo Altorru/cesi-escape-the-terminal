@@ -61,15 +61,15 @@ class MapMatrix:
         for i in range(self.size):
             for j in range(self.size):
                 if self.matrix[i][j] is None:  # Si la case n'est pas un mur
-                    self.matrix[i][j] = self.generate_random_event(exploration)
+                    self.matrix[i][j] = self.generate_random_event()
 
         self.matrix[0][0] = None  # Assurer que la position de départ est vide
         # Assurer que la position d'arrivée est une sortie
-        self.matrix[self.size - 1][self.size - 1] = (Exit(exploration))
+        self.matrix[self.size - 1][self.size - 1] = Exit(exploration)
         return self.matrix
 
     @staticmethod
-    def generate_random_event(exploration):
+    def generate_random_event():
         """Génère un événement aléatoire"""
         # Ajouter None pour les cases vides
         event_types = [None, Chest, Enemy]
@@ -124,26 +124,32 @@ class Exploration:
         elif direction == "Droite" and y < self.map.size - 1:
             self.current_position = (x, y + 1)
         else:
-            pui.notify("hit_outer_border", "")
-            return False
-        if (self.map.matrix[self.current_position[0]][self.current_position[1]]
-            and not self.map.matrix[self.current_position[0]][
-                self.current_position[1]].
-                can_be_explored):
-            (self.map.matrix[self.current_position[0]][self.current_position[1]]
-             .trigger_event(self.player))
+            return False, "border"
+
+        current_cell = self.map.matrix[self.current_position[0]][
+            self.current_position[1]]
+        if (current_cell is not None and
+            hasattr(current_cell, 'can_be_explored') and
+            not current_cell.can_be_explored):
+            if hasattr(current_cell, 'trigger_event'):
+                current_cell.trigger_event(self.player)
             self.current_position = (x, y)  # Revert to the previous position
-            return False
-        return True
+            return False, "wall"
+        return True, None
 
     def trigger_current_event(self):
         """Déclenche l'événement de la case actuelle"""
         current_event = self.map.matrix[self.current_position[0]][
             self.current_position[1]]
-        if current_event and (
-            not current_event.is_explored or isinstance(current_event, Portal)):
-            current_event.trigger_event(self.player)
-        elif current_event and current_event.is_explored:
+        if current_event is not None and (
+            (hasattr(current_event,
+                     'is_explored') and not current_event.is_explored) or
+            isinstance(current_event, Portal)):
+            if hasattr(current_event, 'trigger_event'):
+                current_event.trigger_event(self.player)
+        elif (current_event is not None and
+              hasattr(current_event, 'is_explored') and
+              current_event.is_explored):
             pui.notify("already_explored", "")
         else:
             pui.notify("empty_area", "")
@@ -151,9 +157,19 @@ class Exploration:
     def start(self):  # Move with questionary
         """Démarre l'exploration de la matrice"""
         previous_position_valid = True
+        error_message = None
+
         while True:
             pui.notify("show_current_map",
                        [self.map.matrix, self.current_position])
+
+            # Afficher le message d'erreur après la carte s'il y en a un
+            if error_message:
+                if error_message == "wall":
+                    pui.notify("hit_wall", "")
+                elif error_message == "border":
+                    pui.notify("hit_outer_border", "")
+
             if previous_position_valid:
                 self.trigger_current_event()
 
@@ -163,4 +179,4 @@ class Exploration:
             if next_move == "Quitter":
                 break
 
-            previous_position_valid = self.move_player(next_move)
+            previous_position_valid, error_message = self.move_player(next_move)

@@ -1,7 +1,9 @@
-from abc import ABC, abstractmethod
-from ui import PassiveUI
-import questionary
 import random
+from abc import ABC, abstractmethod
+
+import questionary
+
+from ui import PassiveUI
 
 pui = PassiveUI()
 
@@ -26,7 +28,6 @@ class Wall(Location):
     def trigger_event(self, hero):
         """Le mur ne déclenche aucun événement, il bloque simplement le passage"""
         self.is_explored = True
-        pui.notify("hit_wall", "")
 
 class Exit(Location):
     """Représente la sortie de la zone d'exploration"""
