@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import questionary
 from rich.console import Console
 from rich.panel import Panel
+import keyboard
 
 console = Console()
 
@@ -117,21 +118,26 @@ class PassiveUI(Observer):
 
         """============================== Colorizer ==============================="""
 
-
 class ActiveUI(Observer):
     """============================== PRINTERS ==============================="""
 
     def notify(self, event_type, data):
         """------------------- PLAYER EVENTS -----------------"""
         if event_type == "next_move":
-            return questionary.select(
-                "Direction ?",
-                choices=["Haut      ⮝",
-                         "Droite    ⮞",
-                         "Bas       ⮟",
-                         "Gauche    ⮜",
-                         "Quitter"]
-            ).ask()
+            print("Utilisez les flèches pour vous déplacer et 'esc' pour quitter.")
+            while True:
+                event = keyboard.read_event()
+                if event.event_type == keyboard.KEY_DOWN:
+                    if event.name == "up":
+                        return "Haut      ⮝"
+                    elif event.name == "right":
+                        return "Droite    ⮞"
+                    elif event.name == "down":
+                        return "Bas       ⮟"
+                    elif event.name == "left":
+                        return "Gauche    ⮜"
+                    elif event.name == "esc":
+                        return "Quitter"
 
         """============================== BUILDERS =============================="""
 
