@@ -15,7 +15,6 @@ from exploration import MapMatrix, Exploration
 hero = Hero("Alex", 100, 15)
 
 map_matrix = MapMatrix(10)
-map_matrix.generate_procedural_map()
 map_matrix.show_matrix()
 
 exploration = Exploration(hero, map_matrix)
