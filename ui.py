@@ -91,29 +91,38 @@ class PassiveUI(Observer):
                  data]))
 
         if event_type == "show_current_map":
+            from rich.table import Table
+
             # data contains data[matrix]: matrice d'objets, data[current_position]: tuple
-            # Border style then show the map matrix with the position of the player and the explored zones, else empty zones
-            console.clear()
+            matrix = data[0]
+            current_position = data[1]
 
             def get_emoji(position, screen_matrix):
                 return screen_matrix[position[0]][position[1]].emoji if \
-                screen_matrix[position[0]][position[1]] else "⬜"
+                    screen_matrix[position[0]][position[1]] else " "
 
-            map_str = ""
-            matrix = data[0]
-            current_position = data[1]
+            # Créer une table sans bordures ni headers
+            table = Table(show_header=False, show_lines=False, padding=(0, 0),
+                          box=None)
+
+            # Ajouter les colonnes (une par colonne de la matrice)
+            for _ in range(len(matrix[0])):
+                table.add_column(justify="left", min_width=2, no_wrap=True)
+
+            # Construire chaque ligne
             for y, row in enumerate(matrix):
+                row_items = []
                 for x, cell in enumerate(row):
                     if (y, x) == current_position:
-                        map_str += "🧑 "  # Emoji for the player
+                        row_items.append("🧑")
                     elif cell and getattr(cell, "is_explored", False):
-                        map_str += get_emoji((y, x), matrix) + " "
+                        row_items.append(get_emoji((y, x), matrix))
                     else:
-                        map_str += "⬜ "
-                map_str += "\n"
+                        row_items.append(" ")
+                table.add_row(*row_items)
 
-            console.print(
-                Panel.fit(map_str, border_style="blue", title="Map"))
+            console.clear()
+            console.print(Panel.fit(table, border_style="blue", title="Map"))
 
         """============================== Colorizer ==============================="""
 
