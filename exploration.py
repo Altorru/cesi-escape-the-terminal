@@ -2,7 +2,7 @@ import random
 
 from base import Portal, Chest, Wall, Exit
 from characters import Enemy
-from factories import LocationFactory, ObjectFactory
+from factories import LocationFactory
 from ui import PassiveUI, ActiveUI
 
 pui = PassiveUI()
@@ -44,15 +44,16 @@ class MapMatrix:
                     # 50% de chance d'ajouter un mur
                     not in safe_zones and random.random() < 0.5):
                     self.matrix[i][j] = Wall()
-        
+
         # Ajouter X portails aléatoires dans une case vide (1 portail tous les 5 niveaux)
         num_portals = max(1, exploration.level // 5)
-        for _ in range(num_portals):
+        print(f"Generating {num_portals} portals for level {exploration.level}")
+        for num in range(num_portals):
             while True:
-                x, y = random.randint(0, self.size - 1), random.randint( 0, self.size - 1)
-                if self.matrix[x][y] is None: # Si la case est vide
-                    self.matrix[x][y] = LocationFactory.create_portal(exploration)
-                    exploration.portals_list.append(self.matrix[x][y])
+                x, y = random.randint(0, self.size - 1), random.randint(0,
+                                                                        self.size - 1)
+                if self.matrix[x][y] is None:  # Si la case est vide
+                    self.matrix[x][y] = Portal(f"Portal {num + 1}", exploration)
                     break
 
         # Étape 2 : Ajouter des événements aléatoires dans les cases restantes
@@ -78,14 +79,7 @@ class MapMatrix:
         chosen_event_type = random.choices(event_types, weights=weights, k=1)[0]
 
         if chosen_event_type is Chest:
-            # 50% de chance que le coffre contienne une clé pour un portail existant
-            content = []
-            if exploration.portals_list and random.random() < 0.5:
-                portal_to_open = random.choice(exploration.portals_list)
-                content.append(ObjectFactory.create_key(portal_to_open))
-                exploration.portals_list.remove(portal_to_open) # Retirer le portail de la liste pour éviter d'avoir plusieurs clés pour le même portail
-
-            return LocationFactory.create_chest(content)
+            return LocationFactory.create_chest()
         elif chosen_event_type is Enemy:
             return LocationFactory.create_enemy()
         else:
@@ -101,7 +95,6 @@ class Exploration:
     def __init__(self, player, level=1):
         self.player = player
         self.level = level
-        self.portals_list = []
         self.map = MapMatrix(5, self)
         self.current_position = (0, 0)
 
@@ -116,20 +109,19 @@ class Exploration:
         self.map = MapMatrix(5 + self.level, self)
         self.current_position = (0, 0)
         pui.notify("clear_screen", "")
-        pui.notify("welcome_to_level",  self)
+        pui.notify("welcome_to_level", self)
         pui.notify("show_current_map", [self.map.matrix, self.current_position])
-        self.player.inventory = [] # Réinitialiser l'inventaire du joueur à chaque niveau
 
     def move_player(self, direction):
         """Déplace le joueur dans la matrice en fonction de la direction choisie"""
         x, y = self.current_position
-        if direction == "Haut      ⮝" and x > 0:
+        if direction == "Haut" and x > 0:
             self.current_position = (x - 1, y)
-        elif direction == "Bas       ⮟" and x < self.map.size - 1:
+        elif direction == "Bas" and x < self.map.size - 1:
             self.current_position = (x + 1, y)
-        elif direction == "Gauche    ⮜" and y > 0:
+        elif direction == "Gauche" and y > 0:
             self.current_position = (x, y - 1)
-        elif direction == "Droite    ⮞" and y < self.map.size - 1:
+        elif direction == "Droite" and y < self.map.size - 1:
             self.current_position = (x, y + 1)
         else:
             pui.notify("hit_outer_border", "")
@@ -158,7 +150,6 @@ class Exploration:
 
     def start(self):  # Move with questionary
         """Démarre l'exploration de la matrice"""
-        pui.notify("clear_screen", "")
         previous_position_valid = True
         while True:
             pui.notify("show_current_map",
