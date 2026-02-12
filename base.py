@@ -21,10 +21,11 @@ class Wall(Location):
     """Représente un mur infranchissable dans une zone d'exploration"""
     def __init__(self):
         super().__init__(can_be_explored=False)
-        self.emoji = "🧱"
+        self.emoji = "🚧"
     
     def trigger_event(self, hero):
         """Le mur ne déclenche aucun événement, il bloque simplement le passage"""
+        self.is_explored = True
         pui.notify("hit_wall", "")
 
 class Exit(Location):

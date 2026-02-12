@@ -110,7 +110,7 @@ class Exploration:
         if (self.map.matrix[self.current_position[0]][self.current_position[1]]
             and not self.map.matrix[self.current_position[0]][self.current_position[1]].
                 can_be_explored):
-            pui.notify("hit_wall", "")
+            self.map.matrix[self.current_position[0]][self.current_position[1]].trigger_event(self.player)
             self.current_position = (x, y)  # Revert to the previous position
             return False
         pui.notify("show_current_map", [self.map.matrix, self.current_position] )
