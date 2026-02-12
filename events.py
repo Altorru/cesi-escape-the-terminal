@@ -13,7 +13,7 @@ class PathEvent:
     def trigger_event(self, hero:Hero):
         """Déclenche l'événement associé à la location"""
         if isinstance(self.location, Portal):
-            pui.notify("blocked_move", self.location.leads_to)
+            pui.notify("hit_wall", self.location.leads_to)
             return self.location.leads_to
         
         elif isinstance(self.location, Chest):
