@@ -28,12 +28,14 @@ class Wall(Location):
 
 class Exit(Location):
     """Représente la sortie de la zone d'exploration"""
-    def __init__(self):
+    def __init__(self, exploration=None):
         super().__init__(can_be_explored=True)
+        self.exploration = exploration
     
     def trigger_event(self, hero):
         """Déclenche l'événement de la sortie"""
         pui.notify("found_exit", "")
+        self.exploration.next_level(1)
         self.is_explored = True
 
 class Portal(Location):

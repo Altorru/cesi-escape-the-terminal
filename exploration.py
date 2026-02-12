@@ -50,7 +50,7 @@ class MapMatrix:
                     self.matrix[i][j] = self.generate_random_event(exploration)
 
         self.matrix[0][0] = None  # Assurer que la position de départ est vide
-        self.matrix[self.size - 1][self.size - 1] = Exit()  # Assurer que la position d'arrivée est une sortie
+        self.matrix[self.size - 1][self.size - 1] = Exit(exploration)  # Assurer que la position d'arrivée est une sortie
         return self.matrix
 
     @staticmethod
@@ -121,8 +121,6 @@ class Exploration:
         current_event = self.map.matrix[self.current_position[0]][self.current_position[1]]
         if current_event and (not current_event.is_explored or isinstance(current_event, Portal)):
             current_event.trigger_event(self.player)
-            if isinstance(current_event, Exit):
-                exit(0)
         elif current_event and current_event.is_explored:
             pui.notify("already_explored", "")
             print("\n🔁 You've already explored this area. Nothing happens.")
