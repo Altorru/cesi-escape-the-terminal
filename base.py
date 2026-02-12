@@ -23,7 +23,7 @@ class Wall(Location):
     
     def trigger_event(self, hero):
         """Le mur ne déclenche aucun événement, il bloque simplement le passage"""
-        pui.notify("blocked_move", "")
+        pui.notify("hit_wall", "")
 
 class Exit(Location):
     """Représente la sortie de la zone d'exploration"""
