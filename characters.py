@@ -14,7 +14,7 @@ class Character:
 
     def take_damage(self, damage):
         self.health -= damage
-    
+
     def attack_target(self, target):
         target.take_damage(self.attack)
 
@@ -25,10 +25,11 @@ class Enemy(Character, Location):
         self.dropped_exp = dropped_exp
         self.is_explored = False
         self.can_be_explored = True
-        self.emoji = "👹"
-    
+        self.tile_type = "enemy"
+
     def trigger_event(self, hero):
-        """Déclenche l'événement de combat avec l'ennemi, juste mettre des dégats et récuperer de l'xp à la fin du combat"""
+        # Déclenche l'événement de combat avec l'ennemi, juste mettre des dégats
+        # et récupérer de l'XP à la fin du combat
         pui.notify("enemy_encounter", self)
 
         pui.notify("enemy_defeated", self)
