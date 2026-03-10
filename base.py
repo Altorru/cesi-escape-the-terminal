@@ -3,20 +3,18 @@ from abc import ABC, abstractmethod
 
 import questionary
 
-from ui import PassiveUI
-import questionary
-import random
 from objects import Key
+from ui import PassiveUI
 
 pui = PassiveUI()
 
 
 class Location(ABC):
-    """Classe de base pour les différentes locations (Portal, Chest, etc...)"""
+    """Classe de base pour les différentes locations (Portal, Chest, etc.)"""
     def __init__(self, can_be_explored=True):
         self.can_be_explored = can_be_explored
         self.is_explored = False
-    
+
     @abstractmethod
     def trigger_event(self, hero):
         """Méthode à implémenter pour déclencher l'événement associé à la location"""
@@ -26,8 +24,8 @@ class Wall(Location):
     """Représente un mur infranchissable dans une zone d'exploration"""
     def __init__(self):
         super().__init__(can_be_explored=False)
-        self.emoji = "🚧"
-    
+        self.tile_type = "wall"
+
     def trigger_event(self, hero):
         """Le mur ne déclenche aucun événement, il bloque simplement le passage"""
         self.is_explored = True
@@ -37,13 +35,13 @@ class Exit(Location):
     def __init__(self, exploration=None):
         super().__init__(can_be_explored=True)
         self.exploration = exploration
-        self.emoji = "🚪"
-    
+        self.tile_type = "door"
+
     def trigger_event(self, hero):
         """Déclenche l'événement de la sortie"""
+        self.is_explored = True
         pui.notify("found_exit", "")
         self.exploration.next_level(1)
-        self.is_explored = True
 
 class Portal(Location):
     """Représente un portail vers une prochaine zone ou un autre portail"""
@@ -51,11 +49,12 @@ class Portal(Location):
         super().__init__()
         self.name = name
         self.exploration = exploration
-        self.emoji = "🌀"
+        self.tile_type = "portal"
         self.is_locked = True # Par défaut, le portail est verrouillé et nécessite une clé pour être utilisé
-    
+
     def trigger_event(self, hero):
         """Déclenche l'événement de la porte"""
+        self.is_explored = True
         if self.exploration:
             next_level = random.randint(1, 3) # Simuler la génération d'un prochain niveau
             next_level_str = f"Level {self.exploration.level + next_level}"
@@ -70,8 +69,9 @@ class Portal(Location):
                 pui.notify("portal_locked", "")
         else:
             pui.notify("found_portal", "nulle part")
-        self.is_explored = True
-        return self.exploration 
+        return self.exploration
+
+
 
 class Chest(Location):
     """Représente un coffre dans une zone d'exploration"""
@@ -79,9 +79,9 @@ class Chest(Location):
         super().__init__()
         if contents is None:
             contents = []
-        self.contents = contents  # Contenu du coffre (ex: arme, potion)
-        self.emoji = "📦"
-    
+        self.contents = contents  # Contenu du coffre (ex : arme, potion)
+        self.tile_type = "chest"
+
     def trigger_event(self, hero):
         """Déclenche l'événement du coffre"""
         pui.notify("found_chest", "")

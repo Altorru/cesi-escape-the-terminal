@@ -6,8 +6,28 @@ from abc import ABC, abstractmethod
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+from rich.text import Text
 
 console = Console()
+
+# Dictionnaire définissant les tuiles du jeu
+# Clé : type de tuile (str)
+# Valeur: tuple (caractère Unicode, style Rich) pour l'affichage
+TILES: dict[str, tuple[str, str]] = {
+    "player": ("🧑", ""),  # Personnage du joueur - bien visible
+    "wall": ("█", "bold white"),  # Mur infranchissable
+    "door": ("🚪", ""),  # Porte/sortie
+    "portal": ("🌀", ""),  # Portail magique
+    "chest": ("🎁", ""),  # Coffre à butin
+    "enemy": ("👹", ""),  # Ennemi
+}
+
+def render_tile(tile_type: str) -> Text:
+    """
+    Crée un objet Text Rich pour afficher une tuile avec son style.
+    """
+    char, style = TILES[tile_type]
+    return Text(char, style=style)
 
 
 class Observer(ABC):
@@ -116,10 +136,6 @@ class PassiveUI(Observer):
             matrix = data[0]
             current_position = data[1]
 
-            def get_emoji(position, screen_matrix):
-                return screen_matrix[position[0]][position[1]].emoji if \
-                    screen_matrix[position[0]][position[1]] else " "
-
             # Créer une table sans bordures ni headers
             table = Table(show_header=False, show_lines=False, padding=(0, 0),
                           box=None)
@@ -133,12 +149,19 @@ class PassiveUI(Observer):
                 row_items = []
                 for x, cell in enumerate(row):
                     if (y, x) == current_position:
-                        row_items.append("🧑")
+                        row_items.append(render_tile("player"))
                     elif cell and getattr(cell, "is_explored", False):
-                        row_items.append(get_emoji((y, x), matrix))
+                        # Afficher la tuile avec Rich selon son type
+                        tile_type = getattr(cell, "tile_type", None)
+                        if tile_type:
+                            row_items.append(render_tile(tile_type))
+                        else:
+                            row_items.append(" ")
                     else:
+                        # Afficher un espace vide pour les cases non explorées
                         row_items.append(" ")
                 table.add_row(*row_items)
+
 
             console.print(Panel.fit(table, border_style="blue", title="Map"))
 
@@ -150,7 +173,7 @@ class ActiveUI(Observer):
         """------------------- PLAYER EVENTS -----------------"""
         if event_type == "next_move":
             print(
-                "Utilisez les flèches pour vous déplacer et 'esc' pour quitter.")
+                "Utilisez les flèches pour vous déplacer et 'q' pour quitter.")
             while True:
                 key = get_key()
                 if key == "up":
@@ -165,6 +188,6 @@ class ActiveUI(Observer):
                 elif key == "left":
                     console.clear()
                     return "Gauche"
-                elif key == "esc":
+                elif key == "q":
                     return "Quitter"
         return None
