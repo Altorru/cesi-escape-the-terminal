@@ -2,6 +2,8 @@ import sys
 import termios
 import tty
 from abc import ABC, abstractmethod
+from objects import Potion, Key
+import questionary
 
 from rich.console import Console
 from rich.panel import Panel
@@ -90,6 +92,9 @@ class PassiveUI(Observer):
 
         if event_type == "found_chest":
             console.print("\nTu as trouvé un [green]coffre[/green]!")
+        
+        if event_type == "show_health":
+            console.print(f"\n[red]HP: {data}[/red]")
 
         if event_type == "found_item":
             console.print(f"\nTu as trouvé [bold yellow]{data.name}![/bold yellow]")
@@ -174,6 +179,35 @@ class ActiveUI(Observer):
                 elif key == "left":
                     console.clear()
                     return "Gauche"
+                elif key == "i":
+                    console.clear()
+                    return "Inventaire"
                 elif key == "esc":
                     return "Quitter"
+        if event_type == "show_inventory":
+            inventory = data
+            if not inventory:
+                console.print("\n[italic]Votre inventaire est vide.[/italic]")
+                return None
+            # Show all items in inventory and select one to develop actions on it with questionary
+            choices = [
+                f"{item.name} ({'Potion' if isinstance(item, Potion) else 'Clé'})"
+                for item in inventory
+            ]
+            choices.append("Retour")
+            action = questionary.select(
+                "Sélectionnez un objet pour l'utiliser ou 'Retour' pour revenir :",
+                choices=choices,
+            ).ask()
+            if action == "Retour":
+                console.clear()
+                return None
+            selected_item = inventory[choices.index(action)]
+            if isinstance(selected_item, Potion):
+                use = questionary.confirm(
+                    f"Veux-tu utiliser {selected_item.name} pour restaurer {selected_item.heal_amount} HP ?"
+                ).ask()
+                if use:
+                    return selected_item
+
         return None

@@ -1,8 +1,6 @@
 import random
 from abc import ABC, abstractmethod
 
-import questionary
-
 from ui import PassiveUI
 import questionary
 import random

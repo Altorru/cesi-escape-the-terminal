@@ -1,6 +1,7 @@
 import random
 
 from base import Portal, Chest, Wall, Exit
+from objects import Potion
 from characters import Enemy
 from factories import LocationFactory, ObjectFactory
 from ui import PassiveUI, ActiveUI
@@ -187,6 +188,14 @@ class Exploration:
 
             # Demander au joueur où il veut aller ensuite
             next_move = aui.notify("next_move", "")
+
+            if next_move == "Inventaire":
+                item_selected = aui.notify("show_inventory", self.player.inventory)
+                if isinstance(item_selected, Potion):
+                    self.player.heal(item_selected.heal_amount)
+                    self.player.inventory.remove(item_selected)
+                    pui.notify("show_health", self.player.health)
+                continue
 
             if next_move == "Quitter":
                 break
