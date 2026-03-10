@@ -84,6 +84,10 @@ class MapMatrix:
                 portal_to_open = random.choice(exploration.portals_list)
                 content.append(ObjectFactory.create_key(portal_to_open))
                 exploration.portals_list.remove(portal_to_open) # Retirer le portail de la liste pour éviter d'avoir plusieurs clés pour le même portail
+            
+            # 30% de chance que le coffre contienne une potion de soin
+            if random.random() < 0.3:
+                content.append(ObjectFactory.create_potion())
 
             return LocationFactory.create_chest(content)
         elif chosen_event_type is Enemy:

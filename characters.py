@@ -8,6 +8,7 @@ class Character:
         self.name = name
         self.health = health
         self.attack = attack
+        self.max_health = health
 
     def is_alive(self):
         return self.health > 0
@@ -15,6 +16,9 @@ class Character:
     def take_damage(self, damage):
         self.health -= damage
     
+    def heal(self, amount):
+        self.health = min(self.max_health, self.health + amount)
+
     def attack_target(self, target):
         target.take_damage(self.attack)
 
