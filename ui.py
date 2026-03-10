@@ -114,6 +114,19 @@ class PassiveUI(Observer):
                 f"\nTu as battu [red]{data.name}[/red] "
                 f"et gagné [blue]{data.dropped_exp} EXP ![/blue]"
             )
+        
+        if event_type == "player_defeated":
+            console.print("\n[red]Tu as été vaincu... Game Over ![/red]")
+        
+        if event_type == "fled_from_battle":
+            console.print("\n[italic yellow]Tu as fui le combat ![/italic yellow]")
+
+        if event_type == "show_health_bar_and_name":
+            health_percentage = data.health / data.max_health
+            bar_length = 20
+            filled_length = int(bar_length * health_percentage)
+            bar = "█" * filled_length + "-" * (bar_length - filled_length)
+            console.print(f"\n{data.name} |{bar}| {data.health}/{data.max_health} HP")
 
         """============================== BUILDERS =============================="""
         """---------------- MAP BUILDING BLOCKS--------------------"""
@@ -209,5 +222,10 @@ class ActiveUI(Observer):
                 ).ask()
                 if use:
                     return selected_item
-
+        if event_type == "choose_fight_action":
+            action = questionary.select(
+                "Que veux-tu faire ?",
+                choices=["Attaquer", "Inventaire", "Fuir"],
+            ).ask()
+            return action
         return None
