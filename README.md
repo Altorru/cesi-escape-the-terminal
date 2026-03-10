@@ -34,12 +34,14 @@ Un jeu d'exploration de donjon roguelike développé en Python appliquant les pr
 
 ## 🚀 Quickstart
 
-### Prérequis
+### Méthode 1 (sans Docker)
+
+#### Prérequis
 
 - Python 3.8+
 - pip (gestionnaire de paquets Python)
 
-### Installation
+#### Installation
 
 1. **Cloner ou télécharger le projet**
 
@@ -62,17 +64,37 @@ venv\Scripts\activate  # Sur Windows
 pip install -r requirements.txt
 ```
 
-### Lancer le jeu
+#### Lancer le jeu
 
 ```bash
 python main.py
 ```
 
-### Contrôles
+#### Contrôles
 
 - **Flèches directionnelles** : Déplacer le héros (↑ ↓ ← →)
 - **I** : Ouvrir l'inventaire
-- **ESC** : Quitter le jeu
+- **Q** : Quitter le jeu
+
+### Méthode 2 (avec Docker)
+
+1. **Construire l'image Docker**
+
+```bash
+docker build -t escape-terminal .
+```
+
+2. **Lancer le conteneur**
+
+```bash
+docker run -it escape-terminal
+```
+
+3. **Contrôles**
+
+- **Flèches directionnelles** : Déplacer le héros (↑ ↓ ← →)
+- **I** : Ouvrir l'inventaire
+- **Q** : Quitter le jeu
 
 ---
 
