@@ -2,12 +2,14 @@ import sys
 import termios
 import tty
 from abc import ABC, abstractmethod
-from objects import Potion, Key
-import questionary
 
+import questionary
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+from rich.text import Text
+
+from objects import Potion
 
 console = Console()
 
@@ -215,7 +217,6 @@ class ActiveUI(Observer):
                 elif key == "i":
                     console.clear()
                     return "Inventaire"
-                elif key == "esc":
                 elif key == "q":
                     return "Quitter"
         if event_type == "show_inventory":
