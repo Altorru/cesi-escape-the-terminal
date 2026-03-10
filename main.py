@@ -1,8 +1,3 @@
-# Matrice représentant les différentes zones et leurs stages
-# Chaque None correspond à une zone explorable ouverte.
-# Il y a aussi 3 Classes Portale, Chest, Enemy pour les événements d'exploration
-# Ces classes sont enfant de la classe Location.
-
 from characters import Hero
 from exploration import Exploration
 from ui import PassiveUI
